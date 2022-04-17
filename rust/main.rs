@@ -10,6 +10,20 @@
 // rust install on a fresh linux liteos
 //    -- https://www.linuxliteos.com/
 //
+// booster from www.pololu.com
+//   ---- https://www.pololu.com/product/2136
+//   booster hook up
+//   vdd   - pico +3.3v
+//   brk   - nc
+//   slp   - nc
+//   dir   - pico gpio15
+//   pwm   - pico +3.3v
+//   gnd   - any pico gnd
+//   out+  - dcc rail
+//   out-  - dcc rail
+//   vmm   - +12v
+//   cs    - nc
+//   fault - nc
 /* 
 sudo apt install git gdb-multiarch
     
