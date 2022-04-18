@@ -105,6 +105,24 @@ mod app {
         ((array[7] as u32) <<  0)
     }
 
+    // function assemble_packet:
+    //     you supply locomotive address and data byte (direction, speed)
+    // this function will generate dcc packet consisting of 8 bytes,
+    // see nmra for dcc packet format: https://www.nmra.org/sites/default/files/s-92-2004-07.pdf
+    // I've chosen 8 bytes to align to two 32 bits (4 bytes) for the pico pio tx fifo buffer
+    // 8 bytes format as follows:
+    // 1st byte - 0xff (generates eight 1 bits, parts of preamble)
+    // 2nd byte - 0xfe (generates seven 1 bits (still preamble), last lsb bit is zero which is packet start bit (see nmra docs)
+    // 3rd byte - 0x?? address of the locomotive, msb must be 0 (this version is only good for 1 byte addressing)
+    // 4th byte - 0x?? bit 7 must be 0 (start of data byte start bit)
+    //                 bits 6 and 5 must be 0b01 (part of data byte, see nmra docs)
+    //                 bits 4,3,2,1,0 (part of data byte)
+    // 5th byte - 0x?? bit 7 is the lsb bit of data byte
+    //                 bit 6 must be 0 is the start bit of checksum
+    //                 bits 5,4,3,2,1,0 is part of the checksum (address xor data byte)
+    // 6th byte - 0x?? bits 7 and 6 are the lsb bits of the checksum from 5th byte
+    //                 bit 5 must be a 1 and this is the end of the packet
+    //                 rest of the bits are don't care bits all the way to the 8th byte
     fn assemble_packet(address: u8, data: u8) -> (u32, u32){
       let checksum = address ^ data;
       let mut packet:[u8; 8] = [0xff,0xfe,address,0x00,0x00,0x00,0x00,0x00];
