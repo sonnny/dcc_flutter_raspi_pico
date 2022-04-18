@@ -1,6 +1,8 @@
 # dcc_flutter_raspi_pico
 dcc demo of android app (flutter) and raspberry pi pico using rust
 
+youtube demo -->  https://www.youtube.com/watch?v=FUroU-ptDjU
+
 see rust/main.rs for hookup to the hc-19 ble module and drv8801 dcc booster
 
 *****************************************
